@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    margin: 0; 
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+body {
+    background-color: #798ea2;
+}
+
+
+.tasks-container {
+    display: flex;
+    background-color: #aaaaaa;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.tasks-container li {
+    list-style: none;
+}
+
+.tasks-container a {
+    text-decoration: none !important;
+    color: #000000;
+    outline: none;
+}
+
+.task-box {
+    border: 1px solid #717171; 
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #20dc16;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+}

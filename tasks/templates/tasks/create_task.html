@@ -1,0 +1,78 @@
+{% extends "tasks/base.html" %}
+{% load static %}
+
+{% block content %}
+  
+  <div id="create-task-root"></div>
+
+  <script type="text/babel">
+    function CreateTaskForm() {
+      const [title, setTitle] = React.useState("");
+      const [description, setDescription] = React.useState("");
+      const [message, setMessage] = React.useState("");
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const token = localStorage.getItem("access");
+
+        const response = await fetch("/api/v1/tasks/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `JWT ${token}`,
+          },
+          body: JSON.stringify({
+            title,
+            description,
+          }),
+        });
+
+        if (response.ok) {
+          setMessage("✅ Задача успешно создана!");
+          setTitle("");
+          setDescription("");
+        } else {
+          setMessage("❌ Ошибка при создании задачи.");
+        }
+      };
+
+      return (
+        <div>
+            <div className="mb-3 col-md-3">
+            <h2>Создать задачу</h2>
+            </div>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3 col-md-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Название задачи"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+            </div>
+            <div className="mb-3 col-md-3">
+            <textarea
+              className="form-control"
+              rows={10} 
+              placeholder="Описание"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+            </div>
+            <div className="mb-3 col-md-3">
+                <button type="submit" className="btn btn-primary">Создать</button>
+            </div>
+        </form>
+          <p>{message}</p>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("create-task-root")).render(
+      <CreateTaskForm />
+    );
+  </script>
+{% endblock %}

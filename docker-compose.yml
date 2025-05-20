@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: task_manager
+      POSTGRES_USER: task_manager_user
+      POSTGRES_PASSWORD: task_manager_password
+    networks:
+      - task_manager_network
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=task_manager
+      - DB_USER=task_manager_user
+      - DB_PASSWORD=task_manager_password
+    networks:
+      - task_manager_network
+
+networks:
+  task_manager_network:
+
+volumes:
+  postgres_data:

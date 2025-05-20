@@ -1,0 +1,8 @@
+-r requirements.txt
+
+pytest
+pytest-django
+djangorestframework
+pytest-factoryboy
+coverage
+pytest-cov

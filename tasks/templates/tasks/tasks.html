@@ -1,0 +1,178 @@
+{% extends "tasks/base.html" %}
+{% load static %}
+{% block content %}
+
+    <div id="root"></div>
+    <script type="text/babel">
+
+        function App() {
+            const [data, setData] = React.useState([]);
+            const [accessToken, setAccessToken] = React.useState(localStorage.getItem("access"));
+            const [nextPage, setNextPage] = React.useState(null);
+            const [previousPage, setPreviousPage] = React.useState(null);
+            const [count, setCount] = React.useState(0);  // Общее количество задач
+            const [currentPage, setCurrentPage] = React.useState(1);  // Текущая страница
+            const username = localStorage.getItem("username");
+            const tasksPerPage = 3;  // Количество задач на странице
+
+            // Функция для обновления токена
+            const refreshToken = async () => {
+                const refresh = localStorage.getItem("refresh");
+                if (!refresh) {
+                    console.log("Нет refresh токена. Не удается обновить access токен.");
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/v1/token/refresh/', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ refresh })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        const newAccessToken = data.access;
+                        setAccessToken(newAccessToken);
+                        localStorage.setItem("access", newAccessToken);
+                    } else {
+                        console.log("Не удалось обновить токен: ", data);
+                    }
+                } catch (err) {
+                    console.log("Ошибка при обновлении токена: ", err);
+                }
+            };
+
+            // Функция для получения данных
+            const fetchData = async (url) => {
+                if (!accessToken) {
+                    console.log("Нет access токена. Перенаправление на страницу логина.");
+                    return;
+                }
+
+                try {
+                    const response = await fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `JWT ${accessToken}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    if (response.status === 401) {
+                        // Если токен истек, обновляем его
+                        await refreshToken();
+                    }
+
+                    const data = await response.json();
+                    console.log("Полученные данные: ", data['results']);
+                    setData(data['results']);
+                    setNextPage(data['next']);
+                    setPreviousPage(data['previous']);
+                    setCount(data['count']);  // Сохраняем общее количество задач
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+
+            React.useEffect(() => {
+                fetchData('/api/v1/tasks/');
+            }, [accessToken]);
+
+            // Функция для перехода на следующую страницу
+            const handleNextPage = () => {
+                if (nextPage) {
+                    fetchData(nextPage);
+                    setCurrentPage(currentPage + 1);  // Увеличиваем номер страницы
+                }
+            };
+
+            // Функция для перехода на предыдущую страницу
+            const handlePreviousPage = () => {
+                if (previousPage) {
+                    fetchData(previousPage);
+                    setCurrentPage(currentPage - 1);  // Уменьшаем номер страницы
+                }
+            };
+
+            // Вычисление общего числа страниц
+            const totalPages = Math.ceil(count / tasksPerPage);
+
+            // Функция для перехода на конкретную страницу
+            const handlePageClick = (pageNumber) => {
+                setCurrentPage(pageNumber);
+                const pageUrl = `/api/v1/tasks/?page=${pageNumber}`;
+                fetchData(pageUrl);
+            };
+
+            return (
+                <div>
+                    {username ? "" : <h2>Log in to see your tasks.</h2>}
+                    <h1>My Tasks</h1>
+                    <a href="{% url 'create_task' %}">Create new task</a>
+                    
+                        <ul>
+                        <div className="tasks-container">
+                            {data.map((item) => (
+                                <a href={`/tasks/${item.id}`} key={item.id}>
+                                   
+                                    <div className="task-box">
+                                        <li>
+                                            <h2>{item.title}</h2>
+                                            <p>{item.description}</p>
+                                            <p>{item.status ? "Complete" : "Not Complete"}</p>
+                                        </li>
+                                    </div> 
+                                </a>
+                            ))}
+                        </div>
+                        </ul>
+                    
+
+                    {/* Отображение сообщения, если задач нет */}
+                    {data.length === 0 && <p>No tasks available.</p>}
+
+                    {/* Отображение текущей страницы и общего количества страниц */}
+                    <div>
+                        <p>Page {currentPage} of {totalPages}</p>
+                    </div>
+
+                    {/* Кнопки пагинации */}
+                    <div className="pagination">
+                        <button 
+                            className={`btn btn-primary ${!previousPage ? "disabled" : ""}`} 
+                            onClick={handlePreviousPage} 
+                            disabled={!previousPage}
+                        >
+                            Previous
+                        </button>
+
+                        {/* Кнопки для перехода по страницам */}
+                        {[...Array(totalPages).keys()].map(page => (
+                            <button 
+                                key={page + 1} 
+                                className={`btn btn-primary mx-1 ${page + 1 === currentPage ? "active" : ""}`}
+                                onClick={() => handlePageClick(page + 1)} 
+                            >
+                                {page + 1}
+                            </button>
+                        ))}
+
+                        <button 
+                            className={`btn btn-primary ${!nextPage ? "disabled" : ""}`} 
+                            onClick={handleNextPage} 
+                            disabled={!nextPage}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+    </script>
+{% endblock %}

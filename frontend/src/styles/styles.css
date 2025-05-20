@@ -1,0 +1,318 @@
+/* ========== Base ========== */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background-color: #333;
+  color: #333;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  color: white;
+  background-color: #333;
+}
+
+.navbar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #db0909;
+  color: #f5f5f5;
+}
+
+/* ========== Headings ========== */
+h2 {
+  font-size: 2rem;
+  color: #f5f5f5;
+  margin: 40px 0 20px;
+}
+
+/* ========== Forms (login, register, reset, profile, task forms) ========== */
+.form-box,
+.login,
+.register,
+.reset-password-form,
+.reset-password-confirm,
+.profile,
+.create-task-form,
+.task-edit-form,
+.task-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px auto 0;
+  padding: 20px;
+  max-width: 400px;
+  background-color: #444;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.login,
+.register {
+  padding: 25px;
+}
+
+.profile {
+  padding: 50px;
+}
+
+.container {
+  position: relative;
+  top: 70px;
+}
+
+/* Input Fields */
+.login input, .reset-password-form input,
+.register input, .profile input,
+.create-task-form input, .task-edit-form input,
+.create-task-form textarea, .task-edit-form textarea,
+.create-task-form select, .task-edit-form select,
+.container select,
+.container input,
+textarea,
+select {
+  background-color: #444;
+  color: #f5f5f5;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  width: 320px;
+}
+
+
+.login input:focus, .reset-password-form input:focus,
+.register input:focus, .profile input:focus,
+.create-task-form input:focus, .task-edit-form input:focus,
+.create-task-form textarea:focus, .task-edit-form textarea:focus,
+.create-task-form select:focus, .task-edit-form select:focus,
+.reset-password-confirm input:focus, .filters input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #0088ff;
+  box-shadow: 0 0 5px #0088ff;
+  background-color: #555;
+  color: #f5f5f5;
+}
+
+
+/* Buttons */
+button {
+  background-color: #0088ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 250px;
+}
+
+button:hover {
+  background-color: #0070d1;
+}
+
+/* ========== Task View ========== */
+.tasks-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: #333;
+}
+
+.task-item {
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  color: #f5f5f5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+.task-item a {
+  text-decoration: none;
+}
+
+.task-item:hover {
+  background-color: #444;
+}
+
+.task-item input,
+.task-item textarea {
+  width: 100%;
+}
+
+/* Task Title and Description */
+.task-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f5f5f5;
+}
+
+.task-detail {
+  background-color: #444;
+  font-size: 1rem;
+  color: #ddd;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 10px;
+  max-width: 350px;
+  margin: 0 auto;
+  position: relative;
+  top: 50px;
+  text-align: left;
+}
+
+.task-detail p {
+  margin: 0;
+  padding: 0;
+  color: #f5f5f5;
+  line-height: 1.5;
+}
+
+/* Task Buttons */
+.task-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  width: 400px;
+}
+.task-buttons button,  .task-buttons a {
+  margin-right: 10px;
+  margin-top: 10px;
+  width: 200px;
+}
+
+.task-buttons .btn-primary {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.task-buttons .btn-danger {
+  background-color: #dc3545;
+  border: 1px solid #c82333;
+}
+
+.task-buttons .btn-danger:hover {
+  background-color: #c82333;
+  border: 1px solid #bd2130;
+}
+
+.task-buttons .btn-link {
+  color: #f5f5f5;
+}
+
+/* ========== Filters ========== */
+.filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select,
+.filters .form-control,
+.filters .form-select {
+  max-width: 250px;
+  width: 200px;
+  margin-right: 10px;
+}
+
+/* ========== Pagination ========== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #333;
+}
+
+.pagination button {
+  width: 100px;
+}
+
+.page-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.page-numbers button {
+  margin: 0 5px;
+  width: 40px;
+}
+
+.page-numbers button:hover {
+  background-color: #0077ff;
+  color: white;
+}
+
+.page-numbers .btn-primary {
+  background-color: #00aaff;
+  color: white;
+  font-weight: bold;
+}
+
+.page-numbers .btn-secondary {
+  background-color: #ebebeb;
+  color: #6c757d;
+}
+
+/* ========== Misc ========== */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.form-check-input {
+  width: 10px !important;
+  margin: 5px;
+}
+
+
+/* ========== Responsive ========== */
+@media only screen and (max-width: 768px) {
+  .tasks-container,
+  .filters {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+}

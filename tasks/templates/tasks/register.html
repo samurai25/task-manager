@@ -1,0 +1,71 @@
+{% extends "tasks/base.html" %}
+{% load static %}
+
+{% block content %}
+    
+    <div id="register-root"></div>
+
+    <script type="text/babel">
+        function RegisterForm() {
+            const [username, setUsername] = React.useState("");
+            const [email, setEmail] = React.useState("");
+            const [password, setPassword] = React.useState("");
+            const [confirmPassword, setConfirmPassword] = React.useState("");
+            const [message, setMessage] = React.useState("");
+    
+            const handleRegister = async (e) => {
+                e.preventDefault();
+
+                if (password !== confirmPassword) {  
+                    setMessage("❌ Пароли не совпадают.");
+                    return;
+                }
+
+
+                const response = await fetch("/api/v1/register/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, password, password2: confirmPassword}),
+                });
+    
+                if (response.ok) {
+                    setMessage("✅ Регистрация успешна! Теперь войдите.");
+                } else {
+                    setMessage("❌ Ошибка регистрации. Попробуйте снова.");
+                }
+            };
+    
+            return (
+                <div>
+                    <div className="mb-3 col-md-3">
+                        <h2>Регистрация</h2>
+                        {message && <p>{message}</p>}
+                    </div>
+
+                    <form onSubmit={handleRegister}>
+                        <div className="mb-3 col-md-3">
+                            <input type="text" className="form-control" placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        </div>
+                        <div className="mb-3 col-md-3">
+                            <input type="email" className="form-control" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        </div>
+                        <div className="mb-3 col-md-3">
+                            <input type="password" className="form-control" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        </div>
+                        <div className="mb-3 col-md-3">
+                            <input type="password" className="form-control" placeholder="Подтверждение пароля" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                        </div>
+                        <div className="mb-3 col-md-3">
+                            <button type="submit" className="btn btn-primary">Зарегистрироваться</button>
+                        </div>
+                    </form>
+                    <p>{message}</p>
+                </div>
+            );
+        }
+    
+        ReactDOM.createRoot(document.getElementById("register-root")).render(<RegisterForm />);
+    </script>
+    
+{% endblock %}
+

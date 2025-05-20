@@ -1,0 +1,95 @@
+{% extends "tasks/base.html" %}
+{% load static %}
+{% block content %}
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function TaskDetail() {
+      const [task, setTask] = React.useState(null);
+      const [title, setTitle] = React.useState("");
+      const [description, setDescription] = React.useState("");
+      const [status, setStatus] = React.useState(false);
+      const accessToken = localStorage.getItem("access");
+
+      const taskId = window.location.pathname.split("/").filter(Boolean).pop();  // Получаем ID из URL
+
+      React.useEffect(() => {
+        fetch(`/api/v1/tasks/${taskId}/`, {
+          headers: {
+            "Authorization": `JWT ${accessToken}`,
+            "Content-Type": "application/json",
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          setTask(data);
+          setTitle(data.title);
+          setDescription(data.description);
+          setStatus(data.status);
+        })
+        .catch(error => console.log("Ошибка при загрузке задачи:", error));
+      }, []);
+
+      const handleUpdate = () => {
+        fetch(`/api/v1/tasks/${taskId}/`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `JWT ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, description, status }),
+        })
+        .then(res => {
+          if (res.ok) {
+            alert("Задача обновлена!");
+          } else {
+            alert("Ошибка при обновлении.");
+          }
+        });
+      };
+
+      const handleDelete = () => {
+        if (!confirm("Удалить задачу?")) return;
+        fetch(`/api/v1/tasks/${taskId}/`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `JWT ${accessToken}`,
+          },
+        })
+        .then(res => {
+          if (res.ok) {
+            window.location.href = "/tasks/";
+          } else {
+            alert("Ошибка при удалении.");
+          }
+        });
+      };
+
+      if (!task) return <p>Загрузка...</p>;
+
+      return (
+        <div>
+          <h2>Редактирование задачи</h2>
+          <div className="mb-3">
+            <label>Title:</label>
+            <input className="form-control" value={title} onChange={e => setTitle(e.target.value)} />
+          </div>
+          <div className="mb-3">
+            <label>Description:</label>
+            <textarea className="form-control" value={description} onChange={e => setDescription(e.target.value)} />
+          </div>
+          <div className="form-check mb-3">
+            <input className="form-check-input" type="checkbox" checked={status} onChange={e => setStatus(e.target.checked)} />
+            <label className="form-check-label">Complete</label>
+          </div>
+          <button className="btn btn-success me-2" onClick={handleUpdate}>Save</button>
+          <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+          <br /><br />
+          <a href="/tasks/">← Назад к задачам</a>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<TaskDetail />);
+  </script>
+{% endblock %}
