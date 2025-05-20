@@ -27,6 +27,8 @@ jobs:
           --health-retries 5
 
     env:
+      EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+      EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
       DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
       DJANGO_SECRET_KEY: testsecret
       DJANGO_SETTINGS_MODULE: task_manager.settings
