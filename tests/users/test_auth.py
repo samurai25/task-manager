@@ -70,12 +70,12 @@ def test_password_reset_confirm(api_client, create_user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
 
-    password = 'newpassword123'
+    new_password = 'newpassword123'
     response = api_client.post('/api/v1/reset-password-confirm/', {
         'uid': uid,
         'token': token,
-        'password': password,
-        'password2': password,
+        'password1': new_password,
+        'password2': new_password,
     })
     
     assert response.status_code == 200
@@ -97,7 +97,7 @@ def test_password_reset_fail_invalid_token(api_client, create_user):
     response = api_client.post('/api/v1/reset-password-confirm/', {
         'uid': uid,
         'token': invalid_token,
-        'password': 'newpassword123',
+        'password1': 'newpassword123',
         'password2': 'newpassword123',
     })
     
@@ -132,11 +132,11 @@ def test_password_reset_confirm_passwords_do_not_match(api_client, create_user):
     response = api_client.post('/api/v1/reset-password-confirm/', {
         'uid': uid,
         'token': token,
-        'password': 'newpassword123',
+        'password1': 'newpassword123',
         'password2': 'differentpassword123',  # Разные пароли
     })
     
     assert response.status_code == 400  # Ожидаем 400
     assert 'details' in response.data  # Ошибка теперь внутри 'details'
-    assert 'new_password2' in response.data['details']  # Проверяем, что ошибка на поле new_password2
-    assert response.data['details']['new_password2'] == 'Пароли не совпадают.'  # Проверка ошибки
+    assert 'password2' in response.data['details']  # Проверяем, что ошибка на поле new_password2
+    assert response.data['details']['password2'] == 'Пароли не совпадают.'  # Проверка ошибки
