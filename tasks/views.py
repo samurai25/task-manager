@@ -178,20 +178,20 @@ class PasswordResetConfirmView(APIView):
         try:
             uidb64 = request.data.get('uid')
             token = request.data.get('token')
-            password1 = request.data.get('password1')
+            password = request.data.get('password')
             password2 = request.data.get('password2')
 
-            if not all([uidb64, token, password1, password2]):
+            if not all([uidb64, token, password, password2]):
                 return Response({"error": "Не все поля заполнены"}, status=400)
 
-            if password1 != password2:
-                raise ValidationError({'new_password2': 'Пароли не совпадают.'})
+            if password != password2:
+                raise ValidationError({'password2': 'Пароли не совпадают.'})
 
             uid = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(pk=uid)
 
             if default_token_generator.check_token(user, token):
-                user.set_password(password1)
+                user.set_password(password)
                 user.save()
                 return Response({"detail": "Пароль успешно изменен"})
             else:
@@ -207,12 +207,12 @@ class PasswordResetConfirmView(APIView):
 class PasswordResetConfirmSerializer(serializers.Serializer):
     uid = serializers.CharField()
     token = serializers.CharField()
-    password1 = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
     def validate(self, data):
         # Проверка совпадения паролей
-        if data['password1'] != data['password2']:
+        if data['password'] != data['password2']:
             raise serializers.ValidationError({
                 'password2': 'Пароли не совпадают.'
             })
