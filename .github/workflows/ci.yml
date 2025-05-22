@@ -1,0 +1,78 @@
+name: Django + React CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: task_manager
+          POSTGRES_USER: task_manager_user
+          POSTGRES_PASSWORD: task_manager_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      EMAIL_FROM_EMAIL: ${{ secrets.EMAIL_FROM_EMAIL }}
+      EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+      EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+      DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
+      DJANGO_SECRET_KEY: testsecret
+      DJANGO_SETTINGS_MODULE: task_manager.settings
+      DEBUG: 'False'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # --- Python / Django setup ---
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Django migrations
+        run: |
+          python manage.py migrate
+
+      - name: Run Django tests
+        run: |
+          pytest
+
+      # --- Node.js / React setup ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      # Optional: ESLint
+      # - name: Lint JS
+      #   working-directory: ./frontend
+      #   run: npm run lint
