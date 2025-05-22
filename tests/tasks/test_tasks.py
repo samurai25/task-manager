@@ -143,36 +143,6 @@ def test_task_filter_by_priority(api_client, create_user):
     assert len(response.data['results']) == 1  # Должна быть одна задача с приоритетом 'low'
     assert response.data['results'][0]['priority'] == 'low'  # Проверка приоритета задачи
 
-# @pytest.mark.django_db
-# def test_task_filter_by_date(api_client, create_user):
-#     user = create_user(username='username', email='user@example.com', password='password123')
-#     api_client.force_authenticate(user=user)
-
-#     # Создаем задачи с разными датами
-#     date1 = make_aware(datetime(2025, 4, 25, 10, 0))
-#     date2 = make_aware(datetime(2025, 4, 26, 10, 0))
-
-#     task1 = Task.objects.create(
-#         title='Task 1',
-#         description='This is the first task',
-#         user=user,
-#         created_at=date1
-#     )
-
-#     task2 = Task.objects.create(
-#         title='Task 2',
-#         description='This is the second task',
-#         user=user,
-#         created_at=date2
-#     )
-
-#     # Фильтрация по дате
-#     response = api_client.get('/api/v1/tasks/', {'created_at': '2025-04-25'})
-
-#     # Проверяем, что только одна задача соответствует фильтру
-#     assert response.status_code == 200
-#     assert len(response.data['results']) == 1  # Должна быть 1 задача, соответствующая дате
-#     assert response.data['results'][0]['title'] == 'Task 1'
 
 @pytest.mark.django_db
 def test_task_pagination(api_client):
@@ -183,7 +153,7 @@ def test_task_pagination(api_client):
     api_client.force_authenticate(user=user)
 
     # Создание задач, привязанных к пользователю
-    for i in range(15):  # 15 задач, если PAGE_SIZE = 5, будет 3 страницы
+    for i in range(24):  # 24 задач, если PAGE_SIZE = 8, будет 3 страницы
         Task.objects.create(title=f"Task {i}", description="Some description", user=user)
 
     # Получаем первую страницу
@@ -191,7 +161,7 @@ def test_task_pagination(api_client):
 
     # Проверяем статус и количество задач на первой странице
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data['results']) == 5  # 5 задач на странице
+    assert len(response.data['results']) == 8  # 8 задач на странице
 
     # Убедитесь, что на первой странице нет ссылки на предыдущую
     assert 'previous' not in response.data  # На первой странице не должно быть поля 'previous'
@@ -202,9 +172,9 @@ def test_task_pagination(api_client):
     # Получаем вторую страницу, используя ссылку на следующую страницу
     response = api_client.get(response.data['next'])
 
-    # Проверяем, что на второй странице тоже 5 задач
+    # Проверяем, что на второй странице тоже 8 задач
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data['results']) == 5
+    assert len(response.data['results']) == 8
 
     # На второй странице должно быть поле 'previous'
     assert 'previous' in response.data  # Должна быть ссылка на предыдущую страницу
@@ -212,9 +182,9 @@ def test_task_pagination(api_client):
     # Получаем третью страницу, используя ссылку на следующую страницу
     response = api_client.get(response.data['next'])
 
-    # Проверяем, что на третьей странице тоже 5 задач
+    # Проверяем, что на третьей странице тоже 8 задач
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data['results']) == 5
+    assert len(response.data['results']) == 8
 
     # На последней странице не должно быть поля 'next'
     assert response.data['next'] is None  # На последней странице не должно быть ссылки на следующую страницу
