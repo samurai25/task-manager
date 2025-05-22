@@ -70,12 +70,12 @@ def test_password_reset_confirm(api_client, create_user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
 
-    new_password = 'newpassword123'
+    password = 'newpassword123'
     response = api_client.post('/api/v1/reset-password-confirm/', {
         'uid': uid,
         'token': token,
-        'new_password1': new_password,
-        'new_password2': new_password,
+        'password': password,
+        'password2': password,
     })
     
     assert response.status_code == 200
@@ -97,8 +97,8 @@ def test_password_reset_fail_invalid_token(api_client, create_user):
     response = api_client.post('/api/v1/reset-password-confirm/', {
         'uid': uid,
         'token': invalid_token,
-        'new_password1': 'newpassword123',
-        'new_password2': 'newpassword123',
+        'password': 'newpassword123',
+        'password2': 'newpassword123',
     })
     
     assert response.status_code == 400  # Ожидаем ошибку с кодом 400
@@ -132,8 +132,8 @@ def test_password_reset_confirm_passwords_do_not_match(api_client, create_user):
     response = api_client.post('/api/v1/reset-password-confirm/', {
         'uid': uid,
         'token': token,
-        'new_password1': 'newpassword123',
-        'new_password2': 'differentpassword123',  # Разные пароли
+        'password': 'newpassword123',
+        'password2': 'differentpassword123',  # Разные пароли
     })
     
     assert response.status_code == 400  # Ожидаем 400
