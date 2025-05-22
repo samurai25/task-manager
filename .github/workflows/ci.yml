@@ -15,9 +15,9 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_pass
+          POSTGRES_DB: task_manager
+          POSTGRES_USER: task_manager_user
+          POSTGRES_PASSWORD: task_manager_password
         ports:
           - 5432:5432
         options: >-
