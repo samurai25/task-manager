@@ -139,4 +139,4 @@ def test_password_reset_confirm_passwords_do_not_match(api_client, create_user):
     assert response.status_code == 400  # Ожидаем 400
     assert 'validation_error' in response.data
     assert 'password2' in response.data['validation_error']
-    assert response.data['validation_error']['password2'][0] == 'Пароли не совпадают.'
+    assert str(response.data['validation_error']['password2']) == 'Пароли не совпадают.'
