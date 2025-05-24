@@ -16,6 +16,17 @@
 
 Для удобства разработчиков доступна автоматически генерируемая документация API через Swagger UI (drf-spectacular).
 
+### Стек технологий
+
+- Backend: Django, Django REST Framework, PostgreSQL
+
+- Frontend: React (Vite), Bootstrap, Fetch API
+
+- DevOps: Docker, GitHub Actions
+
+- Прочее: JWT (аутентификация), dotenv
+
+
 ### File Description
 - frontend/public/images/default-avatar.png: image for profile's default avatar.
 - frontend/src/components/Navbar.jsx: navbar component
@@ -3229,3 +3240,6 @@ Then edit .env and add your actual credentials (email password, DB password, etc
  - Backend API: http://localhost:8000/api/v1/
  - Frontend (React): http://localhost:5173/
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
