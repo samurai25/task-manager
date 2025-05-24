@@ -14,9 +14,9 @@
 - трекера привычек и личной эффективности,
 - или встраиваемого API в более крупное приложение.
 
-Для удобства разработчиков доступна автоматически генерируемая документация API через Swagger UI (drf-spectacular).
+Доступна автоматически генерируемая документация API через Swagger UI (drf-spectacular).
 
-### Стек технологий
+### Technologies
 
 - Backend: Django, Django REST Framework, PostgreSQL
 
