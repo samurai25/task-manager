@@ -1,1 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Environments
 .env
+venv/
+.env.*
+
+# Frontend
+node_modules/
+dist/
+build/
+
+# System files
+.DS_Store
+*.swp
+*.bak
+.idea/
+.vscode/
