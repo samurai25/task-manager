@@ -3240,6 +3240,38 @@ Then edit .env and add your actual credentials (email password, DB password, etc
  - Backend API: http://localhost:8000/api/v1/
  - Frontend (React): http://localhost:5173/
 
+
+## Demo
+
+[Смотреть демо на YouTube](https://youtu.be/-_UkyQfKa_o)
+
+## Screenshots
+
+### Register
+![Register Page](docs/screenshots/register.png)
+
+### Login
+![Login Page](docs/screenshots/login.png)
+
+### Home
+![Home Page](docs/screenshots/home.png)
+
+### Create Task
+![Create Task](docs/screenshots/create-task.png)
+
+### Edit Task
+![Task Edit](docs/screenshots/task-edit.png)
+
+### Tasks
+![Tasks Page](docs/screenshots/tasks.png)
+
+### Profile
+![Profile Page](docs/screenshots/profile.png)
+
+### Edit Profile
+![Profile Edit](docs/screenshots/profile-edit.png)
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
