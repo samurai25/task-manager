@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      db:
+      postgres:
         image: postgres:13
         env:
           POSTGRES_DB: task_manager
@@ -30,7 +30,7 @@ jobs:
       EMAIL_FROM_EMAIL: ${{ secrets.EMAIL_FROM_EMAIL }}
       EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
-      DATABASE_URL: postgres://task_manager_user:task_manager_password@postgres:5432/task_manager
+      DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
       DJANGO_SECRET_KEY: testsecret
       DJANGO_SETTINGS_MODULE: task_manager.settings
       DEBUG: 'False'
