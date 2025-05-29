@@ -1,20 +1,22 @@
 ### Task Manager
 
-**Task Manager API** — это RESTful API-сервис для управления задачами пользователей, разработанный с использованием **Django**, **Django REST Framework** и **JWT-аутентификации**. Проект предоставляет удобный и безопасный способ для:
+**Task Manager API** is a RESTful API service for managing user tasks, built using **Django**, **Django REST Framework**, and **JWT authentication**. The project provides a convenient and secure way to:
 
-- регистрации и входа пользователей,
-- создания, редактирования и удаления задач,
-- фильтрации задач по дате создания,
-- получения задач с пагинацией,
-- загрузки и обновления аватара пользователя.
+- register and log in users,  
+- create, edit, and delete tasks,  
+- filter tasks by creation date,  
+- retrieve tasks with pagination,  
+- upload and update user avatars.
 
-Это универсальное решение может выступать как основа для:
-- трекера задач (To-Do),
-- системы управления проектами,
-- трекера привычек и личной эффективности,
-- или встраиваемого API в более крупное приложение.
+This is a versatile solution that can serve as the foundation for:
 
-Доступна автоматически генерируемая документация API через Swagger UI (drf-spectacular).
+- a to-do task tracker,  
+- a project management system,  
+- a habit and productivity tracker,  
+- or an embeddable API within a larger application.
+
+Automatically generated API documentation is available via Swagger UI (drf-spectacular).
+
 
 ### Technologies
 
@@ -24,7 +26,7 @@
 
 - DevOps: Docker, GitHub Actions
 
-- Прочее: JWT (аутентификация), dotenv
+- Other: JWT (authentication), dotenv
 
 
 ### File Description
@@ -3144,7 +3146,7 @@
     postgres_data:
 
 - Dockerfile: 
-    ```plaintext
+    ```docker
     # Используем официальный образ Python
     FROM python:3.11-slim
 
@@ -3202,43 +3204,43 @@ Follow these steps to set up and run the Task Manager locally:
     - cd task-manager
 
 ## Create and activate a virtual environment:
- - python -m venv venv
- - source venv/bin/activate    # On Windows: venv\Scripts\activate
+    - python -m venv venv
+    - source venv/bin/activate    # On Windows: venv\Scripts\activate
 
 ## Install backend dependencies:
- - pip install -r requirements.txt
-
-## Apply migrations and create a superuser (optional):
- - python manage.py migrate
- - python manage.py createsuperuser
+    - pip install -r requirements.txt
 
 ## Environment variables
-Create a `.env` file in the project root:
+    - Create a `.env` file in the project root:
     - cp .env.example .env
-Then edit .env and add your actual credentials (email password, DB password, etc).
+    - Then edit .env and add your actual credentials (email password, DB password, etc).
 
-## Run the development server:
- - python manage.py runserver
+## Frontend (using React separately):
+## Перейди в папку с frontend
+    - cd frontend
 
-## Frontend (if using React separately):
- - npm install
- - source venv/bin/activate    # On Windows: venv\Scripts\activate
- - cd frontend
- - npm run dev
+## Установи зависимости
+    - npm install
+
+## Запусти dev-сервер
+    - npm run dev
 
 ## Option 2: Using Docker Compose
 ## Build and start the containers:
- - docker-compose up --build
+    - docker-compose up --build
 
 ## Apply migrations inside the backend container:
- - docker-compose exec web python manage.py migrate
+    - docker-compose exec web python manage.py migrate
 
 ## Create a superuser (optional):
     - docker-compose exec web python manage.py createsuperuser
 
 ## Access the app:
- - Backend API: http://localhost:8000/api/v1/
- - Frontend (React): http://localhost:5173/
+    - Backend API: http://localhost:8000/api/v1/
+    - Frontend (React): http://localhost:5173/
+
+
+## All dependencies, configurations, and environment are set up through Docker. Running the project without Docker is not officially supported.
 
 
 ## Demo

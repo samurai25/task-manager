@@ -100,7 +100,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'task_manager'),
         'USER': os.getenv('DB_USER', 'task_manager_user'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'task_manager_password'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': '5432',
     }
 }
