@@ -3240,9 +3240,9 @@ Follow these steps to set up and run the Task Manager locally:
     pip install -r requirements.txt
 
 ## Environment variables
-# Create a `.env` file in the project root:
+## Create a `.env` file in the project root:
     cp .env.example .env
-# Then edit .env and add your actual credentials (email password, DB password, etc).
+## Then edit .env and add your actual credentials (email password, DB password, etc).
 
 ## Frontend (using React separately):
 ## Go to the frontend directory
@@ -3269,9 +3269,7 @@ Follow these steps to set up and run the Task Manager locally:
 
 ## Docker-Based Setup
 
-All dependencies, configurations, and the runtime environment are set up via Docker.  
-Running the project outside Docker is **not officially supported**.
-
+All dependencies, configurations, and the runtime environment are set up via Docker. 
 
 ## Demo
 
