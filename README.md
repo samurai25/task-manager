@@ -3157,7 +3157,7 @@ Automatically generated API documentation is available via Swagger UI (drf-spect
     COPY requirements.txt /app/
 
     # Обновляем apt и устанавливаем netcat
-    RUN apt-get update && rm -rf /var/lib/apt/lists/*
+    RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
     # Устанавливаем зависимости
     RUN pip install --no-cache-dir -r requirements.txt
@@ -3172,7 +3172,36 @@ Automatically generated API documentation is available via Swagger UI (drf-spect
     EXPOSE 8000
 
     # Запуск Django сервера
+    # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+    COPY entrypoint.sh /entrypoint.sh
+    RUN chmod +x /entrypoint.sh
+    ENTRYPOINT ["/entrypoint.sh"]
     CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+- entrypoint.sh
+    ```plaintext
+    #!/bin/sh
+
+    # Ожидание, пока база данных не станет доступной
+    echo "Waiting for PostgreSQL..."
+
+    # Ждём подключения к БД
+    while ! nc -z $DB_HOST 5432; do
+    sleep 0.5
+    done
+
+    echo "PostgreSQL is up - continuing..."
+
+    # Выполняем миграции
+    python manage.py migrate
+
+    # Собираем статику, если нужно (для продакшена)
+    # python manage.py collectstatic --noinput
+
+    # Запускаем сервер
+    exec "$@"
+
 
 - requirements.txt: file with dependencies
     ```playntext
@@ -3195,49 +3224,47 @@ Automatically generated API documentation is available via Swagger UI (drf-spect
     drf-spectacular
 
 
-### Installation
+## Installation
 
 Follow these steps to set up and run the Task Manager locally:
 
 ## Clone the repository
-    - git clone https://github.com/samurai25/task-manager.git
-    - cd task-manager
+    git clone https://github.com/samurai25/task-manager.git
+    cd task-manager
 
 ## Create and activate a virtual environment:
-    - python -m venv venv
-    - source venv/bin/activate    # On Windows: venv\Scripts\activate
+    python -m venv venv
+    source venv/bin/activate    # On Windows: venv\Scripts\activate
 
 ## Install backend dependencies:
-    - pip install -r requirements.txt
+    pip install -r requirements.txt
 
 ## Environment variables
     - Create a `.env` file in the project root:
-    - cp .env.example .env
+    cp .env.example .env
     - Then edit .env and add your actual credentials (email password, DB password, etc).
 
 ## Frontend (using React separately):
-## Перейди в папку с frontend
-    - cd frontend
+## Go to the frontend directory
+    cd frontend
 
-## Установи зависимости
-    - npm install
+## Install dependencies
+    npm install
 
-## Запусти dev-сервер
-    - npm run dev
+## Run dev-server
+    npm run dev
 
-## Option 2: Using Docker Compose
+## Using Docker Compose
 ## Build and start the containers:
-    - docker-compose up --build
+    docker-compose up --build
 
-## Apply migrations inside the backend container:
-    - docker-compose exec web python manage.py migrate
-
-## Create a superuser (optional):
-    - docker-compose exec web python manage.py createsuperuser
+## In a new terminal - create a superuser (optional):
+    docker exec -it task-manager-web-1 bash
+    python manage.py createsuperuser
 
 ## Access the app:
-    - Backend API: http://localhost:8000/api/v1/
-    - Frontend (React): http://localhost:5173/
+    Backend API: http://localhost:8000/api/v1/
+    Frontend (React): http://localhost:5173/
 
 
 ## All dependencies, configurations, and environment are set up through Docker. Running the project without Docker is not officially supported.
@@ -3245,7 +3272,7 @@ Follow these steps to set up and run the Task Manager locally:
 
 ## Demo
 
-[Смотреть демо на YouTube](https://youtu.be/-_UkyQfKa_o)
+[Watch on YouTube](https://youtu.be/-_UkyQfKa_o)
 
 ## Screenshots
 
