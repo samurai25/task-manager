@@ -18,6 +18,7 @@ jobs:
           POSTGRES_DB: task_manager
           POSTGRES_USER: task_manager_user
           POSTGRES_PASSWORD: task_manager_password
+          POSTGRES_HOST: localhost
         ports:
           - 5432:5432
         options: >-
