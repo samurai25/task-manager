@@ -15,9 +15,9 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          DB_NAME: task_manager
-          DB_USER: task_manager_user
-          DB_PASSWORD: task_manager_password
+          POSTGRES_DB: task_manager
+          POSTGRES_USER: task_manager_user
+          POSTGRES_PASSWORD: task_manager_password
           DB_HOST: localhost
           DB_PORT: 5432
         ports:
