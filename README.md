@@ -3240,9 +3240,9 @@ Follow these steps to set up and run the Task Manager locally:
     pip install -r requirements.txt
 
 ## Environment variables
-    - Create a `.env` file in the project root:
+# Create a `.env` file in the project root:
     cp .env.example .env
-    - Then edit .env and add your actual credentials (email password, DB password, etc).
+# Then edit .env and add your actual credentials (email password, DB password, etc).
 
 ## Frontend (using React separately):
 ## Go to the frontend directory
@@ -3262,12 +3262,15 @@ Follow these steps to set up and run the Task Manager locally:
     docker exec -it task-manager-web-1 bash
     python manage.py createsuperuser
 
-## Access the app:
-    Backend API: http://localhost:8000/api/v1/
-    Frontend (React): http://localhost:5173/
+## Access the App
 
+- **Backend API**: [http://localhost:8000/api/v1/](http://localhost:8000/api/v1/)
+- **Frontend (React)**: [http://localhost:5173/](http://localhost:5173/)
 
-## All dependencies, configurations, and environment are set up through Docker. Running the project without Docker is not officially supported.
+## Docker-Based Setup
+
+All dependencies, configurations, and the runtime environment are set up via Docker.  
+Running the project outside Docker is **not officially supported**.
 
 
 ## Demo
