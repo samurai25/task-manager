@@ -101,7 +101,7 @@ DATABASES = {
         'USER': os.getenv('DB_USER', 'task_manager_user'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'task_manager_password'),
         'HOST': os.getenv('DB_HOST', 'db'),
-        'PORT': '5432',
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
