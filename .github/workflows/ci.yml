@@ -12,14 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      db:
         image: postgres:13
         env:
           POSTGRES_DB: task_manager
           POSTGRES_USER: task_manager_user
           POSTGRES_PASSWORD: task_manager_password
-          DB_HOST: localhost
-          DB_PORT: 5432
         ports:
           - 5432:5432
         options: >-
@@ -32,7 +30,7 @@ jobs:
       EMAIL_FROM_EMAIL: ${{ secrets.EMAIL_FROM_EMAIL }}
       EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
-      DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
+      DATABASE_URL: postgres://task_manager_user:task_manager_password@postgres:5432/task_manager
       DJANGO_SECRET_KEY: testsecret
       DJANGO_SETTINGS_MODULE: task_manager.settings
       DEBUG: 'False'
