@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, I
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 from django.shortcuts import render, redirect, get_object_or_404
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -58,6 +58,7 @@ class TaskAPIListPagination(PageNumberPagination):
         return response
     
 class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = TaskAPIListPagination
@@ -142,6 +143,12 @@ class RegisterViewSet(viewsets.ModelViewSet):
 
 
 class PasswordResetRequestView(APIView):
+    serializer_class = PasswordResetRequestSerializer
+
+    @extend_schema(
+        request=PasswordResetRequestSerializer,
+        responses={200: None}
+    )
     def post(self, request):
         email = request.data.get("email")
         
@@ -174,6 +181,12 @@ class PasswordResetRequestView(APIView):
         }, status=200)
 
 class PasswordResetConfirmView(APIView):
+    serializer_class = PasswordResetConfirmSerializer
+
+    @extend_schema(
+        request=PasswordResetConfirmSerializer,
+        responses={200: None}
+    )
     def post(self, request):
         try:
             uidb64 = request.data.get('uid')
@@ -204,19 +217,6 @@ class PasswordResetConfirmView(APIView):
             logger.exception("Ошибка при сбросе пароля")
             return Response({"error": "Внутренняя ошибка сервера"}, status=500)
 
-class PasswordResetConfirmSerializer(serializers.Serializer):
-    uid = serializers.CharField()
-    token = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        # Проверка совпадения паролей
-        if data['password'] != data['password2']:
-            raise serializers.ValidationError({
-                'password2': 'Пароли не совпадают.'
-            })
-        return data
      
 def index(request):
     return render(request, "tasks/index.html")

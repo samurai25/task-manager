@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer
+from .serializers import UserSerializer, AvatarUploadSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import exception_handler
 from django.db import transaction
 from django.contrib.auth import get_user_model
+from drf_spectacular.utils import extend_schema
 import logging
 
 User = get_user_model()
@@ -17,9 +18,10 @@ User = get_user_model()
 # Настройка логирования
 logger = logging.getLogger(__name__)
 
-class CurrentUserView(APIView):
+class CurrentUserView(GenericAPIView):
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
-
+    
     def get(self, request):
         try:
             serializer = UserSerializer(request.user)
@@ -29,10 +31,10 @@ class CurrentUserView(APIView):
             return Response({'error': 'Unable to fetch user data.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class UploadAvatarView(APIView):
+class UploadAvatarView(GenericAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
-
+    serializer_class = AvatarUploadSerializer
     def post(self, request):
         try:
             user = request.user
@@ -50,9 +52,13 @@ class UploadAvatarView(APIView):
             return Response({'error': 'An error occurred while uploading avatar.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class UpdateProfileView(APIView):
+class UpdateProfileView(GenericAPIView):
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
+    
+    def get_object(self):
+        return self.request.user
 
     def put(self, request):
         try:
@@ -70,7 +76,9 @@ class UpdateProfileView(APIView):
             logger.error(f"Error updating profile: {e}")
             return Response({'error': 'An error occurred while updating profile.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
+@extend_schema(
+    responses={204: None}
+)
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_avatar(request):

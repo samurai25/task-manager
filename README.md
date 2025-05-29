@@ -3224,7 +3224,7 @@ Automatically generated API documentation is available via Swagger UI (drf-spect
     drf-spectacular
 
 
-## Installation
+# Installation
 
 Follow these steps to set up and run the Task Manager locally:
 
@@ -3233,16 +3233,16 @@ Follow these steps to set up and run the Task Manager locally:
     cd task-manager
 
 ## Create and activate a virtual environment:
-    python -m venv venv
+    python3 -m venv venv
     source venv/bin/activate    # On Windows: venv\Scripts\activate
 
 ## Install backend dependencies:
     pip install -r requirements.txt
 
 ## Environment variables
-## Create a `.env` file in the project root:
+### Create a `.env` file in the project root:
     cp .env.example .env
-## Then edit .env and add your actual credentials (email password, DB password, etc).
+### Then edit .env and add your actual credentials (email password, DB password, etc).
 
 ## Frontend (using React separately):
 ## Go to the frontend directory
@@ -3265,6 +3265,7 @@ Follow these steps to set up and run the Task Manager locally:
 ## Access the App
 
 - **Backend API**: [http://localhost:8000/api/v1/](http://localhost:8000/api/v1/)
+- **API Docs (Swagger)**: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/)
 - **Frontend (React)**: [http://localhost:5173/](http://localhost:5173/)
 
 ## Docker-Based Setup
